@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BASIC/collector</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <section class="hero">
+    <header class="navbar">
+      <div class="logo">BASIC/collector</div>
+      <nav class="menu">
+        <a href="#">HOME</a>
+        <a href="#">REGISTRAR</a>
+        <a href="#">LISTAS</a>
+      </nav>
+    </header>
+    <img src="/public/hunter.gif" alt="Imagen anime Gon">
+  </section>
+
+  <div class="container">
+    <div class="box">
+      <img src="/public/naruto.jpg" alt="Imagen 1">
+    </div>
+    <div class="box">
+      <img src="/public/demon.jpg" alt="Imagen 2">
+    </div>
+    <div class="box">
+      <img src="/public/attack.jpg" alt="Imagen 3">
+    </div>
+  </div>
+
+  <hr class="hr-custom">
+
+  <div class="add-container">
+    <p>Da click! en agregar para sumar un anime a tu colección</p>
+    <button class="btn-add" id="openModal">+ AGREGAR</button>
+  </div>
+
+  <section class="anime-list">
+    <h2>Mi colección...</h2>
+    
+  </section>
+
+  <!-- Modal -->
+  <div id="animeModal" class="modal">
+    <div class="modal-content">
+      <span class="close" id="closeModal">&times;</span>
+      <h2>Agregar Anime</h2>
+      <form id="animeForm">
+        <div class="input-group">
+          <label for="nombre">Nombre del anime</label>
+          <input type="text" id="nombre" name="nombre" required>
+        </div>
+        <div class="input-group">
+          <label for="descripcion">Descripción</label>
+          <input type="text" id="descripcion" name="descripcion" required>
+        </div>
+        <div class="input-group">
+          <label for="capitulos">Capítulos</label>
+          <input type="number" id="capitulos" name="capitulos" required>
+        </div>
+        <button type="submit" class="btn-add">Guardar</button>
+      </form>
+    </div>
+  </div>
+
+  <script src="/src/controllers/script.js"></script>
+</body>
+</html>
