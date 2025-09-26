@@ -18,7 +18,7 @@ window.onclick = (e) => { if (e.target === modal) modal.style.display = "none"; 
 
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/src/serviceWorker.js')
+    navigator.serviceWorker.register('/serviceWorker.js')
       .then(reg => console.log('Service Worker registrado:', reg))
       .catch(err => console.log('Error al registrar SW:', err));
   });
