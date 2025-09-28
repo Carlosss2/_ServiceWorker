@@ -1,21 +1,3 @@
-// Modal
-const modal = document.getElementById("animeModal");
-const openModal = document.getElementById("openModal");
-const closeModal = document.getElementById("closeModal");
-
-// Lista de cole
-const animeForm = document.getElementById("animeForm");
-const animeList = document.querySelector(".anime-list");
-
-
-openModal.onclick = () => modal.style.display = "block";
-closeModal.onclick = () => modal.style.display = "none";
-window.onclick = (e) => { if (e.target === modal) modal.style.display = "none"; };
-
-
-
-
-
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
     navigator.serviceWorker.register('/serviceWorker.js')
@@ -24,53 +6,80 @@ if ('serviceWorker' in navigator) {
   });
 }
 
+document.addEventListener("DOMContentLoaded", () => {
+    const modal = document.getElementById("animeModal");
+    const openModal = document.getElementById("openModal");
+    const closeModal = document.getElementById("closeModal");
 
-// Función para crear un card dinámico
-function crearAnimeCard(nombre, descripcion, capitulos) {
-  const card = document.createElement("div");
-  card.className = "anime-card";
+    const animeForm = document.getElementById("animeForm");
+    const animeList = document.querySelector(".anime-list");
 
-  const imgDiv = document.createElement("div");
-  imgDiv.className = "anime-img";
-  const img = document.createElement("img");
-  img.src = "/public/hunter.jpg"; 
-  img.alt = nombre;
-  img.className = "anime-img";
-  imgDiv.appendChild(img);
+    // Abrir/cerrar modal
+    openModal.onclick = () => modal.style.display = "block";
+    closeModal.onclick = () => modal.style.display = "none";
+    window.onclick = (e) => { if (e.target === modal) modal.style.display = "none"; };
 
-  const infoDiv = document.createElement("div");
-  infoDiv.className = "anime-info";
-  const h3 = document.createElement("h3");
-  h3.textContent = nombre;
-  const p = document.createElement("p");
-  p.textContent = descripcion;
-  infoDiv.appendChild(h3);
-  infoDiv.appendChild(p);
+    let animes;
+    try {
+        animes = JSON.parse(localStorage.getItem("animes")) || [];
+        animes.forEach(anime => crearAnimeCard(anime));
+    } catch (error) {
+        console.warn("Error al parsear desde localStorage:", error);
+        animes = [];
+    }
 
-  const span = document.createElement("span");
-  span.className = "anime-episodes";
-  span.textContent = `${capitulos} capítulos`;
+    // Evento submit
+    animeForm.addEventListener("submit", (e) => {
+        e.preventDefault();
 
-  card.appendChild(imgDiv);
-  card.appendChild(infoDiv);
-  card.appendChild(span);
+        const anime = {
+            nombre: document.getElementById("nombre").value.trim(),
+            descripcion: document.getElementById("descripcion").value.trim(),
+            capitulos: document.getElementById("capitulos").value.trim()
+        };
 
-  animeList.appendChild(card);
-}
+        if (anime.nombre && anime.descripcion && anime.capitulos) {
+            animes.push(anime);
+            localStorage.setItem("animes", JSON.stringify(animes));
 
-// Evento submit del formulario
-animeForm.addEventListener("submit", (e) => {
-  e.preventDefault();
+            crearAnimeCard(anime);
 
-  const nombre = document.getElementById("nombre").value.trim();
-  const descripcion = document.getElementById("descripcion").value.trim();
-  const capitulos = document.getElementById("capitulos").value.trim();
+            modal.style.display = "none";
+            animeForm.reset();
+            document.getElementById("nombre").focus();
+        }
+    });
 
-  if (nombre && descripcion && capitulos) {
-    crearAnimeCard(nombre, descripcion, capitulos);
+    // Función para crear card en el DOM
+    function crearAnimeCard(anime) {
+        const card = document.createElement("div");
+        card.className = "anime-card";
 
-    // Cierra modal y resetea formulario
-    modal.style.display = "none";
-    animeForm.reset();
-  }
-});
+        const imgDiv = document.createElement("div");
+        imgDiv.className = "anime-img";
+        const img = document.createElement("img");
+        img.src = "/public/hunter.jpg";
+        img.alt = anime.nombre;
+        img.className = "anime-img";
+        imgDiv.appendChild(img);
+
+        const infoDiv = document.createElement("div");
+        infoDiv.className = "anime-info";
+        const h3 = document.createElement("h3");
+        h3.textContent = anime.nombre;
+        const p = document.createElement("p");
+        p.textContent = anime.descripcion;
+        infoDiv.appendChild(h3);
+        infoDiv.appendChild(p);
+
+        const span = document.createElement("span");
+        span.className = "anime-episodes";
+        span.textContent = `${anime.capitulos} capítulos`;
+
+        card.appendChild(imgDiv);
+        card.appendChild(infoDiv);
+        card.appendChild(span);
+
+        animeList.appendChild(card);
+    }
+  });
